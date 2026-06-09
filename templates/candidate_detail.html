@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Parser - Candidate Detail</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+
+        .header a:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .detail-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .detail-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .detail-item {
+            margin: 10px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #667eea;
+            font-weight: 600;
+            display: inline-block;
+            min-width: 120px;
+        }
+
+        .detail-value {
+            color: #333;
+            word-break: break-word;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .contact-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-top: 3px solid #667eea;
+        }
+
+        .contact-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            color: #667eea;
+        }
+
+        .contact-card p {
+            color: #555;
+            word-break: break-all;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .summary-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+            color: #2e7d32;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+        }
+
+        .empty-field {
+            color: #999;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>{{ candidate.name }}</h1>
+                <p style="margin-top: 5px; font-size: 0.9em;">Uploaded: {{ candidate.upload_date }}</p>
+            </div>
+            <a href="/">← Back to List</a>
+        </div>
+
+        <div class="content">
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <div class="contact-card">
+                    <h3>📧 Email</h3>
+                    <p>{{ candidate.email if candidate.email else '<span class="empty-field">Not provided</span>' }}</p>
+                </div>
+                <div class="contact-card">
+                    <h3>📱 Phone</h3>
+                    <p>{{ candidate.phone if candidate.phone else '<span class="empty-field">Not provided</span>' }}</p>
+                </div>
+            </div>
+
+            <!-- Professional Summary -->
+            {% if candidate.summary %}
+            <div class="detail-section">
+                <h2>📋 Professional Summary</h2>
+                <div class="summary-box">
+                    {{ candidate.summary }}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Skills -->
+            {% if candidate.skills %}
+            <div class="detail-section">
+                <h2>🛠️ Skills</h2>
+                <div class="skills-list">
+                    {% for skill in candidate.skills.split(',') %}
+                    <span class="skill-tag">{{ skill.strip() }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Education -->
+            {% if candidate.education %}
+            <div class="detail-section">
+                <h2>🎓 Education</h2>
+                <div class="detail-item">
+                    <div class="detail-value">{{ candidate.education }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Experience -->
+            {% if candidate.experience %}
+            <div class="detail-section">
+                <h2>💼 Experience</h2>
+                <div class="detail-item">
+                    <div class="detail-value">{{ candidate.experience }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="/" class="btn btn-primary">← Back to List</a>
+                <form method="POST" action="/delete/{{ candidate.id }}" style="flex: 1;">
+                    <button type="submit" class="btn btn-danger" style="width: 100%;" onclick="return confirm('Are you sure you want to delete this candidate?');">Delete Candidate</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
